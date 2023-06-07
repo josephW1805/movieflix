@@ -1,7 +1,22 @@
 <?php
+require_once("includes/config.php");
+require_once("includes/classes/FormSanitizer.php");
+require_once("includes/classes/Account.php");
+
+$account = new Account($con);
+
 if (isset($_POST["submitButton"])) {
-    echo "Form was submitted";
+
+    $firstName = FormSanitizer::sanitizeFormString($_POST["firstName"]);
+    $lastName = FormSanitizer::sanitizeFormString($_POST["lastName"]);
+    $username = FormSanitizer::sanitizeFormUsername($_POST["username"]);
+    $email = FormSanitizer::sanitizeFormEmail($_POST["email"]);
+    $email2 = FormSanitizer::sanitizeFormEmail($_POST["email2"]);
+    $password = FormSanitizer::sanitizeFormPassword($_POST["password"]);
+    $password2 = FormSanitizer::sanitizeFormPassword($_POST["password2"]);
 }
+
+
 ?>
 <!DOCTYPE html>
 <html>
@@ -27,7 +42,7 @@ if (isset($_POST["submitButton"])) {
 
                 <input type="text" name="lastName" placeholder="Last name" required />
 
-                <input type="text" name="userName" placeholder="User name" required />
+                <input type="text" name="username" placeholder="User name" required />
 
                 <input type="email" name="email" placeholder="Email" required />
 
