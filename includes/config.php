@@ -4,11 +4,10 @@ session_start();
 
 date_default_timezone_set("America/Toronto");
 
-try{
+try {
     $con = new PDO("mysql:dbname=movieflix;host=localhost", "root", "");
     $con->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_WARNING);
-}
-catch (PDOException $e){
+} catch (PDOException $e) {
     exit("Connection failed: " . $e->getMessage());
 }
 ?>

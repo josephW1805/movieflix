@@ -19,7 +19,8 @@ class Entity
         }
     }
 
-    public function getId(){
+    public function getId()
+    {
         return $this->sqlData["id"];
     }
 
@@ -36,6 +37,39 @@ class Entity
     public function getPreview()
     {
         return $this->sqlData["preview"];
+    }
+
+    public function getCategoryId()
+    {
+        return $this->sqlData["categoryId"];
+    }
+
+    public function getSeasons()
+    {
+        $query = $this->con->prepare("SELECT * FROM videos WHERE entityId=:id
+                                     AND isMovie=0 ORDER BY season, episode ASC");
+        $query->bindValue(":id", $this->getId());
+        $query->execute();
+
+        $seasons = array();
+        $videos = array();
+        $currentSeason = null;
+        while ($row = $query->fetch(PDO::FETCH_ASSOC)) {
+
+            if ($currenSeason != null && $currenSeason != $row["season"]) {
+                $seasons[] = new Season($currenSeason, $videos);
+                $videos = array();
+            }
+
+            $currenSeason = $row["season"];
+            $videos[] = new Video($this->con, $row);
+        }
+
+        if(sizeof($videos) != 0) {
+            $seasons[] = new Season($currenSeason, $videos);
+        }
+
+        return $seasons;
     }
 }
 ?>
